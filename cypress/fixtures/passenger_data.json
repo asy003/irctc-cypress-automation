@@ -13,8 +13,8 @@
       "NAME": "GUMNAAM",
       "AGE": 56,
       "GENDER": "Male",
-      "SEAT": "Side Upper",
-      "FOOD": "Veg"
+      "SEAT": "No Preference",
+      "FOOD": "No Food"
     }
   ],
   "__valid_coaches__": "SL | 2A | 3A | 3E | 1A | CC | EC | 2S",
