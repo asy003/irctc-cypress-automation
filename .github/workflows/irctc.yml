@@ -66,8 +66,9 @@ jobs:
     - name: Installing Cypress & Running IRCTC Cypress Automation
       run: |
         # TODO: ToBeDeleted- Temp change to install specific cypress version 13.7.3 to verify warning "vkCreateInstance failed with: Found no drivers" which sometime stuck the workflow and eventually timed it out.
-        npm install cypress@13.7.3 
-        npx cypress -v 
+        # npm install cypress@13.7.3 
+        # npx cypress -v 
+        npm install cypress
         npx cypress run --browser chrome --headed --record --key a15b31a6-b9ee-4678-b9ac-f45a190851fe --env UPI_ID=${{ inputs.UPI_ID || '' }},USERNAME=${{ inputs.USERNAME || secrets.USERNAME }},PASSWORD=${{ inputs.PASSWORD || secrets.PASSWORD }}
 
     # - name: Running IRCTC Cypress Script
