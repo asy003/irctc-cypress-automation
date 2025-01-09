@@ -61,7 +61,7 @@ jobs:
       run: cat flask.log
 
     - name: Wait for Flask server to be ready
-      run: wait-on http://localhost:5000 --timeout 180
+      run: wait-on http://localhost:5000 --timeout 300
     
     - name: Installing Cypress & Running IRCTC Cypress Automation
       run: |
