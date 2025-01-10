@@ -1,7 +1,7 @@
 {
   "TRAIN_NO": "15065",
   "TRAIN_COACH": "SL",
-  "TRAVEL_DATE": "10/01/2025",
+  "TRAVEL_DATE": "11/01/2025",
   "SOURCE_STATION": "LKO",
   "BOARDING_STATION": null,
   "DESTINATION_STATION": "KYN",
@@ -10,8 +10,8 @@
   "UPI_ID_CONFIG": "",
   "PASSENGER_DETAILS": [
     {
-      "NAME": "GUMNAAM",
-      "AGE": 56,
+      "NAME": "Aditya",
+      "AGE": 32,
       "GENDER": "Male",
       "SEAT": "No Preference",
       "FOOD": "No Food"
