@@ -12,7 +12,7 @@
   "author": "Shivam Pandey",
   "license": "ISC",
   "dependencies": {
-    "cypress": "13.7.1",
+    "cypress": "13.7.3",
     "dayjs": "^1.11.10",
     "fs.promises": "^0.1.2",
     "wait-on": "^8.0.1"
