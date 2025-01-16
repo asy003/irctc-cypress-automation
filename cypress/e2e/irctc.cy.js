@@ -23,7 +23,9 @@ describe('IRCTC TATKAL BOOKING', () => {
     cy.viewport(1478, 1056)
     cy.visit('https://www.irctc.co.in/nget/train-search', {
       failOnStatusCode: false,
-      timeout: 90000
+      retryOnNetworkFailure: true,
+      retryOnStatusCodeFailure: true,
+      timeout: 300000
     })
 
 
