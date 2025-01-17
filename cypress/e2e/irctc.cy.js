@@ -21,7 +21,7 @@ describe('IRCTC TATKAL BOOKING', () => {
     cy.clearCookies()
     cy.clearLocalStorage()
     cy.viewport(1478, 1056)
-    cy.visitWithRetry('https://www.irctc.co.in/nget/train-search', 10, 90000)
+    visitWithRetry('https://www.irctc.co.in/nget/train-search', 10, 90000)
 
 
     cy.task("log", `Website Fetching completed.........`)
