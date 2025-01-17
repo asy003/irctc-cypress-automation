@@ -331,3 +331,26 @@ function BOOK_UNTIL_TATKAL_OPENS(
             }
         });
 }
+
+    // Custom retry logic for cy.visit()
+function visitWithRetry(url, retries = 10, timeout = 90000) {
+    let attempt = 0;
+
+    function attemptVisit() {
+        cy.visit(url, { failOnStatusCode: false, timeout: timeout }).then(() => {
+            // If the visit is successful, exit early
+            cy.log(`Page loaded successfully after ${attempt + 1} attempt(s)`);
+        }).catch((err) => {
+            if (attempt < retries) {
+                attempt++;
+                cy.log(`Attempt ${attempt} failed, retrying...`);
+                cy.wait(2000); // Wait before retrying
+                attemptVisit(); // Retry
+            } else {
+                throw new Error(`Failed to load the page after ${retries} attempts`);
+            }
+        });
+    }
+
+    attemptVisit();
+}
