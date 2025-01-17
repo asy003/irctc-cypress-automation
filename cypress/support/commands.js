@@ -33,6 +33,17 @@ Cypress.Commands.add(
     }
 );
 
+Cypress.Commands.add(
+    "visitWithRetry",
+    (url, retries, timeout) => {
+        visitWithRetry(
+            url,
+            retries,
+            timeout
+        );
+    }
+);
+
 function performLogin(LOGGED_IN) {
     if (!LOGGED_IN) {
         cy.wait(500);
