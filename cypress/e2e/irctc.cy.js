@@ -21,15 +21,12 @@ describe('IRCTC TATKAL BOOKING', () => {
     cy.clearCookies()
     cy.clearLocalStorage()
     cy.viewport(1478, 1056)
-    const url = 'https://www.irctc.co.in/nget/train-search'; // URL to visit
-    const options = {
-      maxRetries: 10, // Max retry attempts
-      retryDelay: 5000, // Retry delay (2 seconds)
-      visitTimeout: 90000, // Timeout for each visit attempt (10 seconds)
-    };
 
-    cy.visitWithRetry(url, options)
-
+ cy.visit('https://www.irctc.co.in/nget/train-search', {
+      failOnStatusCode: false,
+      retryOnNetworkFailure: true,
+      timeout: 120000
+    })
 
     cy.task("log", `Website Fetching completed.........`)
     const UPI_ID = Cypress.env().UPI_ID ? Cypress.env().UPI_ID : UPI_ID_CONFIG;
