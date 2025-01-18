@@ -33,17 +33,6 @@ Cypress.Commands.add(
     }
 );
 
-Cypress.Commands.add(
-    "visitWithRetry",
-    (url, retries, timeout) => {
-        visitWithRetry(
-            url,
-            retries,
-            timeout
-        );
-    }
-);
-
 function performLogin(LOGGED_IN) {
     if (!LOGGED_IN) {
         cy.wait(500);
@@ -343,25 +332,36 @@ function BOOK_UNTIL_TATKAL_OPENS(
         });
 }
 
-    // Custom retry logic for cy.visit()
-function visitWithRetry(url, retries = 10, timeout = 90000) {
-    let attempt = 0;
+Cypress.Commands.add('visitWithRetry', (url, options = {}) => {
+  const maxRetries = options.maxRetries || 3; // Max retries
+  const retryDelay = options.retryDelay || 2000; // Delay between retries in ms (default 2 seconds)
+  const visitTimeout = options.visitTimeout || 10000; // Timeout for each visit attempt in ms (default 10 seconds)
 
-    function attemptVisit() {
-        cy.visit(url, { failOnStatusCode: false, timeout: timeout }).then(() => {
-            // If the visit is successful, exit early
-            cy.log(`Page loaded successfully after ${attempt + 1} attempt(s)`);
-        }).catch((err) => {
-            if (attempt < retries) {
-                attempt++;
-                cy.log(`Attempt ${attempt} failed, retrying...`);
-                cy.wait(2000); // Wait before retrying
-                attemptVisit(); // Retry
-            } else {
-                throw new Error(`Failed to load the page after ${retries} attempts`);
-            }
-        });
-    }
+  let attempt = 0; // Track the number of attempts
 
-    attemptVisit();
-}
+  const visitAttempt = () => {
+    attempt++;
+    cy.visit(url, { timeout: visitTimeout }) // Visit with timeout for each attempt
+      .then(() => {
+        // This runs if the visit is successful
+        cy.log(`Page loaded successfully on attempt ${attempt}`);
+      })
+      .should('exist') // Ensure page is loaded, if not retry
+      .then(() => {
+        cy.log(`Successfully visited the page on attempt ${attempt}`);
+      })
+      .catch((err) => {
+        // Handle error and retry if maxRetries is not exceeded
+        if (attempt < maxRetries) {
+          cy.log(`Attempt ${attempt} failed, retrying in ${retryDelay / 1000} seconds...`);
+          cy.wait(retryDelay); // Wait before retrying
+          visitAttempt(); // Retry the visit
+        } else {
+          throw new Error(`Failed to load the page after ${maxRetries} attempts. Error: ${err.message}`);
+        }
+      });
+  };
+
+  // Start the first visit attempt
+  visitAttempt();
+});
