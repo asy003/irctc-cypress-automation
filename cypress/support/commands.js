@@ -339,25 +339,27 @@ Cypress.Commands.add('visitWithRetry', (url, options = {}) => {
 
   let attempt = 0; // Track the number of attempts
 
+  // Recursive function to retry the visit logic
   const visitAttempt = () => {
     attempt++;
     cy.visit(url, { timeout: visitTimeout }) // Visit with timeout for each attempt
       .then(() => {
-        // This runs if the visit is successful
+        // Log success on successful visit
         cy.log(`Page loaded successfully on attempt ${attempt}`);
       })
-      .should('exist') // Ensure page is loaded, if not retry
+      .should('be.visible') // Ensure that an element on the page is visible (or use another check to confirm the page is loaded)
       .then(() => {
         cy.log(`Successfully visited the page on attempt ${attempt}`);
       })
-      .catch((err) => {
-        // Handle error and retry if maxRetries is not exceeded
+      .catch(() => {
+        // Retry logic
         if (attempt < maxRetries) {
           cy.log(`Attempt ${attempt} failed, retrying in ${retryDelay / 1000} seconds...`);
           cy.wait(retryDelay); // Wait before retrying
           visitAttempt(); // Retry the visit
         } else {
-          throw new Error(`Failed to load the page after ${maxRetries} attempts. Error: ${err.message}`);
+          // After max retries, fail the test
+          throw new Error(`Failed to load the page after ${maxRetries} attempts.`);
         }
       });
   };
