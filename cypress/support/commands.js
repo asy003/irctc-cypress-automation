@@ -331,39 +331,3 @@ function BOOK_UNTIL_TATKAL_OPENS(
             }
         });
 }
-
-Cypress.Commands.add('visitWithRetry', (url, options = {}) => {
-  const maxRetries = options.maxRetries || 3; // Max retries
-  const retryDelay = options.retryDelay || 2000; // Delay between retries in ms (default 2 seconds)
-  const visitTimeout = options.visitTimeout || 10000; // Timeout for each visit attempt in ms (default 10 seconds)
-
-  let attempt = 0; // Track the number of attempts
-
-  // Recursive function to retry the visit logic
-  const visitAttempt = () => {
-    attempt++;
-    cy.visit(url, { timeout: visitTimeout }) // Visit with timeout for each attempt
-      .then(() => {
-        // Log success on successful visit
-        cy.log(`Page loaded successfully on attempt ${attempt}`);
-      })
-      .should('be.visible') // Ensure that an element on the page is visible (or use another check to confirm the page is loaded)
-      .then(() => {
-        cy.log(`Successfully visited the page on attempt ${attempt}`);
-      })
-      .catch(() => {
-        // Retry logic
-        if (attempt < maxRetries) {
-          cy.log(`Attempt ${attempt} failed, retrying in ${retryDelay / 1000} seconds...`);
-          cy.wait(retryDelay); // Wait before retrying
-          visitAttempt(); // Retry the visit
-        } else {
-          // After max retries, fail the test
-          throw new Error(`Failed to load the page after ${maxRetries} attempts.`);
-        }
-      });
-  };
-
-  // Start the first visit attempt
-  visitAttempt();
-});
